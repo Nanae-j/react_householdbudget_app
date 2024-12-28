@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node", // Node.js のモジュール解決方式を使用
+    "esModuleInterop": true, // ESモジュールとCommonJSの互換性を確保
+    "resolveJsonModule": true, // JSON モジュールのインポートを許可
+    "allowJs": true, // JavaScript ファイルの読み込みも許可
+    "jsx": "react-jsx" // JSX構文の解析方法
+  }
+}
