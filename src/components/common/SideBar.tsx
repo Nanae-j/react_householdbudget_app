@@ -9,11 +9,12 @@ import {
   ListItemText,
   Toolbar,
 } from '@mui/material';
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import HomeIcon from '@mui/icons-material/Home';
 import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
+import { NavLink } from 'react-router-dom';
 
 interface SidebarProps {
   drawerWidth: number;
@@ -45,6 +46,16 @@ const SideBar = ({
     },
   ];
 
+  const baseLinkStyle: CSSProperties = {
+    textDecoration: 'none',
+    color: 'inherit',
+    display: 'block',
+  };
+
+  const activeLinkStyle: CSSProperties = {
+    backgroundColor: 'rgba(0,0,0,0.08 )',
+  };
+
   // <Drawer></Drawer>の中で表示している中身
   const drawer = (
     <div>
@@ -54,12 +65,23 @@ const SideBar = ({
       {/* 項目 */}
       <List>
         {MenuItems.map((item, index) => (
-          <ListItem key={index} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>{React.createElement(item.icon)}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
+          <NavLink
+            key={index}
+            to={item.path}
+            style={({ isActive }) => {
+              return {
+                ...baseLinkStyle,
+                ...(isActive ? activeLinkStyle : {}),
+              };
+            }}
+          >
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemIcon>{React.createElement(item.icon)}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItemButton>
+            </ListItem>
+          </NavLink>
         ))}
       </List>
     </div>
