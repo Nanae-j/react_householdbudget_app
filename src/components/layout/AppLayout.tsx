@@ -61,7 +61,7 @@ export default function AppLayout() {
           </IconButton>
           {/* ヘッダーに表示されるタイトル */}
           <Typography variant="h6" noWrap component="div">
-            Responsive drawer
+            TypeScript × React 家計簿アプリ
           </Typography>
         </Toolbar>
       </AppBar>
