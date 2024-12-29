@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { theme } from './theme/theme';
 import './App.css';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
@@ -8,8 +8,34 @@ import NoMatch from './pages/NoMatch';
 import AppLayout from './components/layout/AppLayout';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
+import { Transaction } from './types';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from './firebase';
 
 function App() {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'Transactions'));
+
+        const transactionsData = querySnapshot.docs.map((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          // console.log(doc.id, ' => ', doc.data());
+          return {
+            ...doc.data(),
+            id: doc.id,
+          } as Transaction;
+        });
+
+        console.log(transactionsData);
+        setTransactions(transactionsData);
+      } catch (error) {}
+    };
+    fetchTransactions();
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
