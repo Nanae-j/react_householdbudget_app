@@ -11,7 +11,7 @@ import { CssBaseline } from '@mui/material';
 import { Transaction } from './types';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
-import { formatMonth } from './utils/formatMonth';
+import { formatMonth } from './utils/formatting';
 
 function App() {
   // Firestoreエラーかどうかを判定する型ガード
