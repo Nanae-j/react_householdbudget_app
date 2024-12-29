@@ -6,7 +6,7 @@ import { getFirestore } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyA6yeixJ5X1FOwWfSgDMhqfeI1ABVtNZrA',
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: 'household-typescript-8acbe.firebaseapp.com',
   projectId: 'household-typescript-8acbe',
   storageBucket: 'household-typescript-8acbe.firebasestorage.app',
