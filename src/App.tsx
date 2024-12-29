@@ -11,6 +11,7 @@ import { CssBaseline } from '@mui/material';
 import { Transaction } from './types';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
+import { formatMonth } from './utils/formatMonth';
 
 function App() {
   // Firestoreエラーかどうかを判定する型ガード
@@ -21,6 +22,9 @@ function App() {
   }
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  // new Dateを取得しているのでTSが型を自動的に推論してくれる
+  // useState<Date>とする必要なし
+  const [currentMonth, setCurrentMonth] = useState(new Date());
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -36,12 +40,11 @@ function App() {
           } as Transaction;
         });
 
-        console.log(transactionsData);
+        // console.log(transactionsData);
         setTransactions(transactionsData);
       } catch (error) {
         if (isFireStoreError(error)) {
           console.error(error);
-
           // firestoreのエラーだと確定しているので、error.messageやcodeを指定できる
           // console.error(error.message);
           // console.error(error.code);
@@ -53,13 +56,21 @@ function App() {
     fetchTransactions();
   }, []);
 
+  const monthlyTransactions = transactions.filter((transaction) => {
+    return transaction.date.startsWith(formatMonth(currentMonth));
+  });
+  // console.log(monthlyTransactions);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
         <Routes>
           <Route path="/" element={<AppLayout />}>
-            <Route index element={<Home />} />
+            <Route
+              index
+              element={<Home monthlyTransactions={monthlyTransactions} />}
+            />
             <Route path="/report" element={<Report />} />
             <Route path="*" element={<NoMatch />} />
           </Route>
