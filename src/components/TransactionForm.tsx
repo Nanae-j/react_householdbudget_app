@@ -78,7 +78,7 @@ const TransactionForm = ({
       type: 'expense',
       date: currentDay,
       amount: 0,
-      category: '',
+      category: '' as Schema['category'],
       content: '',
     },
     resolver: zodResolver(transactionScheme),
@@ -96,7 +96,7 @@ const TransactionForm = ({
       currentType === 'expense' ? expenseCategories : incomeCategories;
     // 収支のボタンを切り替えた時に選択したカテゴリーが残ったままになり警告出る
     // カテゴリーのstateを更新する前にカテゴリーの選択を空に
-    setValue('category', '');
+    setValue('category', '' as Schema['category']);
     setCategories(newCategories);
   }, [currentType]);
 
