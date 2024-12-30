@@ -57,6 +57,8 @@
 ## ディレクトリ構成
 
 tree -a -I "node_modules|.git|public" -L 3
+
+```
 .
 ├── .env
 ├── .gitignore
@@ -90,9 +92,10 @@ tree -a -I "node_modules|.git|public" -L 3
 │       ├── financeCalculations.ts
 │       └── formatting.ts
 └── tsconfig.json
+```
 
  補足
-
+```
 ├── components
 │   ├── common - 複数のファイルで呼び出す汎用コンポーネント
 │   └── layout - アプリ全体のレイアウト
@@ -102,5 +105,6 @@ tree -a -I "node_modules|.git|public" -L 3
 └── utils - アプリ全体で使用する汎用関数
                ├── financeCalculations.ts - 収支計算に関する関数
                └── formatting.ts - 日付や金額のデータをフォーマットする関数
+```
 
 <p align="right">(<a href="#top">トップへ</a>)</p>
