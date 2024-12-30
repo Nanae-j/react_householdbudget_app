@@ -40,9 +40,12 @@
     <br />
   </p>
 
-      ![AppLayout](https://github.com/user-attachments/assets/dca4704c-a67a-45e2-a520-3dd498a56233)
-    <br />
-    ![Components](https://github.com/user-attachments/assets/3ee0bdb3-a7eb-4ca1-92b6-1a3f876664a6)
+  ### コンポーネントとレイアウトの構成
+
+![AppLayout](https://github.com/user-attachments/assets/fda6f952-24cc-4729-9f06-85640fe8da54)
+
+![Components](https://github.com/user-attachments/assets/6cca303f-d790-4237-ac1e-92545ea6030a)
+
 
 <p align="right">(<a href="#top">トップへ</a>)</p>
 
