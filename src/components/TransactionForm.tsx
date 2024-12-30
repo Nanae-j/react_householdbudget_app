@@ -33,6 +33,10 @@ interface TransactionFormProps {
   selectedTransaction: Transaction | null;
   onDeleteTransaction: (transactionId: string) => Promise<void>;
   setSelectedTransaction: React.Dispatch<React.SetStateAction<Transaction>>;
+  onUpdateTransaction: (
+    transaction: Schema,
+    transactionId: string,
+  ) => Promise<void>;
 }
 
 type IncomeExpense = 'income' | 'expense';
@@ -50,6 +54,7 @@ const TransactionForm = ({
   selectedTransaction,
   setSelectedTransaction,
   onDeleteTransaction,
+  onUpdateTransaction,
 }: TransactionFormProps) => {
   const formWidth = 320;
 
@@ -102,6 +107,7 @@ const TransactionForm = ({
   // 収支タイプを監視
   const currentType = watch('type');
 
+  // 収支タイプに応じたカテゴリを取得
   useEffect(() => {
     const newCategories =
       currentType === 'expense' ? expenseCategories : incomeCategories;
@@ -109,12 +115,49 @@ const TransactionForm = ({
   }, [currentType]);
 
   useEffect(() => {
+    //選択肢が更新されたか確認
+    if (selectedTransaction) {
+      // some関数は中の式が正しければtrueを返す
+      // カテゴリーの文字列が一致した = 更新された と判定する
+      const categoryExists = categories.some(
+        (category) => category.label === selectedTransaction.category,
+      );
+      setValue(
+        'category',
+        categoryExists
+          ? selectedTransaction.category
+          : ('' as Transaction['category']),
+      );
+    }
+  }, [selectedTransaction, categories]);
+
+  // フォーム内容を更新
+  useEffect(() => {
     setValue('date', currentDay);
   }, [currentDay]);
 
   // 送信処理
   const onSubmit: SubmitHandler<Schema> = (data) => {
-    onSaveTransaction(data);
+    // 取引が選択されている = 更新処理
+    if (selectedTransaction) {
+      onUpdateTransaction(data, selectedTransaction.id)
+        .then(() => {
+          // .thenで上記の処理が完了した後に下記の処理が進む
+          setSelectedTransaction(null);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      // 取引が選択されていない = 新規追加
+      onSaveTransaction(data)
+        .then(() => {
+          console.log('新規追加しました');
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
 
     // デフォルトの値でリセットされる
     //ここでdateにcurrentDayを入れることで選択している日付を保持できる
@@ -132,7 +175,7 @@ const TransactionForm = ({
     if (selectedTransaction) {
       setValue('type', selectedTransaction.type);
       setValue('date', selectedTransaction.date);
-      setValue('category', selectedTransaction.category);
+      // setValue('category', selectedTransaction.category);
       setValue('amount', selectedTransaction.amount);
       setValue('content', selectedTransaction.content);
     } else {
@@ -303,7 +346,7 @@ const TransactionForm = ({
             color={currentType === 'income' ? 'primary' : 'error'}
             fullWidth
           >
-            保存
+            {selectedTransaction ? '更新' : '保存'}
           </Button>
 
           {selectedTransaction && (

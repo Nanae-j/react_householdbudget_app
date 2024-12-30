@@ -15,6 +15,7 @@ import {
   getDocs,
   addDoc,
   deleteDoc,
+  updateDoc,
 } from 'firebase/firestore';
 import { db } from './firebase';
 import { formatMonth } from './utils/formatting';
@@ -112,6 +113,32 @@ function App() {
     }
   };
 
+  //更新処理
+  const handleUpdateTransaction = async (
+    transaction: Schema,
+    transactionId: string,
+  ) => {
+    try {
+      const docRef = doc(db, 'Transactions', transactionId);
+
+      // Set the "capital" field of the city 'DC'
+      await updateDoc(docRef, transaction);
+
+      // 即時反映するためにstateも変更
+      // state(transactions)の中でidが一致したtransaction(t)は中身を更新、falseの時はtransaction(t)をそのまま返す
+      const updateTransactions = transactions.map((t) =>
+        t.id === transactionId ? { ...t, ...transaction } : t,
+      ) as Transaction[];
+      setTransactions(updateTransactions);
+    } catch (error) {
+      if (isFireStoreError(error)) {
+        console.error(error);
+      } else {
+        console.error('一般的なエラーは' + error);
+      }
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -126,6 +153,7 @@ function App() {
                   setCurrentMonth={setCurrentMonth}
                   onSaveTransaction={handleSaveTransaction}
                   onDeleteTransaction={handleDeleteTransaction}
+                  onUpdateTransaction={handleUpdateTransaction}
                 />
               }
             />
