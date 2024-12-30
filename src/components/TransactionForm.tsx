@@ -12,6 +12,7 @@ import {
 import React from 'react';
 import CloseIcon from '@mui/icons-material/Close'; // 閉じるボタン用のアイコン
 import FastfoodIcon from '@mui/icons-material/Fastfood'; //食事アイコン
+import { Controller, useForm } from 'react-hook-form';
 
 interface TransactionFormProps {
   onCloseForm: () => void;
@@ -23,6 +24,9 @@ const TransactionForm = ({
   isEntryDrawerOpen,
 }: TransactionFormProps) => {
   const formWidth = 320;
+
+  const { control } = useForm();
+
   return (
     <Box
       sx={{
@@ -60,20 +64,36 @@ const TransactionForm = ({
       <Box component={'form'}>
         <Stack spacing={2}>
           {/* 収支切り替えボタン */}
-          <ButtonGroup fullWidth>
-            <Button variant={'contained'} color="error">
-              支出
-            </Button>
-            <Button>収入</Button>
-          </ButtonGroup>
-          {/* 日付 */}
-          <TextField
-            label="日付"
-            type="date"
-            slotProps={{
-              inputLabel: { shrink: true },
-            }}
+          {/* rect-hook-formとMUIを統合するのに必要 */}
+          <Controller
+            name="type"
+            control={control}
+            render={(field) => (
+              <ButtonGroup fullWidth>
+                <Button variant={'contained'} color="error">
+                  支出
+                </Button>
+                <Button>収入</Button>
+              </ButtonGroup>
+            )}
           />
+
+          {/* 日付 */}
+          <Controller
+            name="date"
+            control={control}
+            render={(field) => (
+              <TextField
+                {...field}
+                label="日付"
+                type="date"
+                slotProps={{
+                  inputLabel: { shrink: true },
+                }}
+              />
+            )}
+          />
+
           {/* カテゴリ */}
           <TextField id="カテゴリ" label="カテゴリ" select value={'食費'}>
             <MenuItem value={'食費'}>
@@ -83,10 +103,13 @@ const TransactionForm = ({
               食費
             </MenuItem>
           </TextField>
+
           {/* 金額 */}
           <TextField label="金額" type="number" />
+
           {/* 内容 */}
           <TextField label="内容" type="text" />
+
           {/* 保存ボタン */}
           <Button type="submit" variant="contained" color={'primary'} fullWidth>
             保存
