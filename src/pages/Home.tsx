@@ -20,7 +20,7 @@ const Home = ({ monthlyTransactions, setCurrentMonth }: HomeProps) => {
     return transaction.date === currentDay;
   });
 
-  console.log(dailyTransactions);
+  // console.log(dailyTransactions);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -35,7 +35,10 @@ const Home = ({ monthlyTransactions, setCurrentMonth }: HomeProps) => {
       </Box>
       {/* 右側コンテンツ */}
       <Box>
-        <TransactionMenu />
+        <TransactionMenu
+          dailyTransactions={dailyTransactions}
+          currentDay={currentDay}
+        />
         <TransactionForm />
       </Box>
     </Box>
