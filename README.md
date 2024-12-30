@@ -108,3 +108,37 @@ tree -a -I "node_modules|.git|public" -L 3
 ```
 
 <p align="right">(<a href="#top">トップへ</a>)</p>
+
+
+## 開発環境構築
+
+In the project directory, you can run:
+
+#### `npm install`
+
+### .env ファイルを作成
+
+以下の環境変数例と[環境変数の一覧](#環境変数の一覧)を元に作成
+
+.env
+FIREBASE_API_KEY=jvA2fVnrPn
+
+```
+### 環境変数の一覧
+
+| 変数名                 | 役割                                   
+| ----------------------| ----------------------------------------------------------------
+| FIREBASE_API_KEY      | household-typescriptプロジェクトのAPIキー(収支コレクションの取得に使用)
+
+```
+
+### 動作確認
+
+#### `npm run start`
+
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+<p align="right">(<a href="#top">トップへ</a>)</p>
+
+
