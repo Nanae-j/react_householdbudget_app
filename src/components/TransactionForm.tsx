@@ -17,15 +17,26 @@ import { Controller, useForm } from 'react-hook-form';
 interface TransactionFormProps {
   onCloseForm: () => void;
   isEntryDrawerOpen: boolean;
+  currentDay: string;
 }
 
 const TransactionForm = ({
   onCloseForm,
   isEntryDrawerOpen,
+  currentDay,
 }: TransactionFormProps) => {
   const formWidth = 320;
 
-  const { control } = useForm();
+  // フォームの各要素の初期値の設定
+  const { control } = useForm({
+    defaultValues: {
+      type: 'expense',
+      date: currentDay,
+      amount: 0,
+      category: '',
+      content: '',
+    },
+  });
 
   return (
     <Box
@@ -68,7 +79,7 @@ const TransactionForm = ({
           <Controller
             name="type"
             control={control}
-            render={(field) => (
+            render={({ field }) => (
               <ButtonGroup fullWidth>
                 <Button variant={'contained'} color="error">
                   支出
@@ -82,7 +93,7 @@ const TransactionForm = ({
           <Controller
             name="date"
             control={control}
-            render={(field) => (
+            render={({ field }) => (
               <TextField
                 {...field}
                 label="日付"
@@ -95,20 +106,38 @@ const TransactionForm = ({
           />
 
           {/* カテゴリ */}
-          <TextField id="カテゴリ" label="カテゴリ" select value={'食費'}>
-            <MenuItem value={'食費'}>
-              <ListItemIcon>
-                <FastfoodIcon />
-              </ListItemIcon>
-              食費
-            </MenuItem>
-          </TextField>
+          <Controller
+            name="category"
+            control={control}
+            render={({ field }) => (
+              <TextField {...field} id="カテゴリ" label="カテゴリ" select>
+                <MenuItem value={'食費'}>
+                  <ListItemIcon>
+                    <FastfoodIcon />
+                  </ListItemIcon>
+                  食費
+                </MenuItem>
+              </TextField>
+            )}
+          />
 
           {/* 金額 */}
-          <TextField label="金額" type="number" />
+          <Controller
+            name="amount"
+            control={control}
+            render={({ field }) => (
+              <TextField {...field} label="金額" type="number" />
+            )}
+          />
 
           {/* 内容 */}
-          <TextField label="内容" type="text" />
+          <Controller
+            name="content"
+            control={control}
+            render={({ field }) => (
+              <TextField {...field} label="内容" type="text" />
+            )}
+          />
 
           {/* 保存ボタン */}
           <Button type="submit" variant="contained" color={'primary'} fullWidth>
