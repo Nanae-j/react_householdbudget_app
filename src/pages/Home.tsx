@@ -60,7 +60,31 @@ const Home = ({
   return (
     <Box sx={{ display: 'flex' }}>
       {/* 左側コンテンツ */}
-      <Box sx={{ flexGrow: 1 }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          pointerEvents: isEntryDrawerOpen ? 'none' : 'auto',
+          position: 'relative',
+        }}
+      >
+        <Box
+          sx={{
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'gray',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            zIndex: 2,
+            visibility: isEntryDrawerOpen ? 'visible' : 'hidden',
+            opacity: isEntryDrawerOpen ? '0.5' : '0',
+            transition: (theme) =>
+              theme.transitions.create('opacity', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+              }),
+          }}
+        />
         <MonthlySummary monthlyTransactions={monthlyTransactions} />
         <Calendar
           monthlyTransactions={monthlyTransactions}
