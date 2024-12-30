@@ -12,22 +12,20 @@ interface HomeProps {
   monthlyTransactions: Transaction[];
   setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
   onSaveTransaction: (transaction: Schema) => Promise<void>;
-  selectedTransaction: Transaction | null;
-  setSelectedTransaction: React.Dispatch<
-    React.SetStateAction<Transaction | null>
-  >;
+  onDeleteTransaction: (transactionId: string) => Promise<void>;
 }
 
 const Home = ({
   monthlyTransactions,
   setCurrentMonth,
   onSaveTransaction,
-  selectedTransaction,
-  setSelectedTransaction,
+  onDeleteTransaction,
 }: HomeProps) => {
   const today = format(new Date(), 'yyyy-MM-dd');
   const [currentDay, setCurrentDay] = useState(today);
   const [isEntryDrawerOpen, setIsEntryDrawerOpen] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
 
   // １日分のデータを取得
   const dailyTransactions = monthlyTransactions.filter((transaction) => {
@@ -108,6 +106,8 @@ const Home = ({
           currentDay={currentDay}
           onSaveTransaction={onSaveTransaction}
           selectedTransaction={selectedTransaction}
+          setSelectedTransaction={setSelectedTransaction}
+          onDeleteTransaction={onDeleteTransaction}
         />
       </Box>
     </Box>

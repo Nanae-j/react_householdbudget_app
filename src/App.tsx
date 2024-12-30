@@ -9,7 +9,13 @@ import AppLayout from './components/layout/AppLayout';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { Transaction } from './types';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import {
+  doc,
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+} from 'firebase/firestore';
 import { db } from './firebase';
 import { formatMonth } from './utils/formatting';
 import { Schema } from './validations/scheme';
@@ -26,8 +32,6 @@ function App() {
   // new Dateを取得しているのでTSが型を自動的に推論してくれる
   // useState<Date>とする必要なし
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedTransaction, setSelectedTransaction] =
-    useState<Transaction | null>(null);
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -89,6 +93,25 @@ function App() {
     }
   };
 
+  //firestoreのデータ削除処理
+  const handleDeleteTransaction = async (transactionId: string) => {
+    console.log(transactionId);
+    try {
+      await deleteDoc(doc(db, 'Transactions', transactionId));
+      //transaction.id !== transactionIdで削除対象のID以外のtransactionが取得できる
+      const filterdTransactions = transactions.filter(
+        (transaction) => transaction.id !== transactionId,
+      );
+      setTransactions(filterdTransactions);
+    } catch (error) {
+      if (isFireStoreError(error)) {
+        console.error(error);
+      } else {
+        console.error('一般的なエラーは' + error);
+      }
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -102,8 +125,7 @@ function App() {
                   monthlyTransactions={monthlyTransactions}
                   setCurrentMonth={setCurrentMonth}
                   onSaveTransaction={handleSaveTransaction}
-                  selectedTransaction={selectedTransaction}
-                  setSelectedTransaction={setSelectedTransaction}
+                  onDeleteTransaction={handleDeleteTransaction}
                 />
               }
             />
