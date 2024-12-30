@@ -38,6 +38,9 @@
     <br />
     <a href=""><strong>プロジェクト詳細 »</strong></a>
     <br />
+    ![AppLayout](https://github.com/user-attachments/assets/dca4704c-a67a-45e2-a520-3dd498a56233)
+    <br />
+    ![Components](https://github.com/user-attachments/assets/3ee0bdb3-a7eb-4ca1-92b6-1a3f876664a6)
     <br />
 
 <p align="right">(<a href="#top">トップへ</a>)</p>
