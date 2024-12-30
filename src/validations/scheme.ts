@@ -18,7 +18,9 @@ export const transactionScheme = z.object({
       z.enum(['給与', '副収入', 'お小遣い']),
       z.literal(''),
     ])
-    .refine((val) => val !== '', { message: 'カテゴリーを選択してください' }),
+    .refine((val) => val !== '', {
+      message: 'カテゴリーを選択してください',
+    }),
 });
 
 export type Schema = z.infer<typeof transactionScheme>;

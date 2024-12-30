@@ -9,9 +9,10 @@ import AppLayout from './components/layout/AppLayout';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { Transaction } from './types';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { db } from './firebase';
 import { formatMonth } from './utils/formatting';
+import { Schema } from './validations/scheme';
 
 function App() {
   // Firestoreエラーかどうかを判定する型ガード
@@ -56,9 +57,25 @@ function App() {
     fetchTransactions();
   }, []);
 
+  // ひと月分のデータのみ取得
   const monthlyTransactions = transactions.filter((transaction) => {
     return transaction.date.startsWith(formatMonth(currentMonth));
   });
+
+  // 取引を保存する処理
+  const handleSaveTransaction = async (transaction: Schema) => {
+    try {
+      //firestoreにデータを保存
+      const docRef = await addDoc(collection(db, 'Transactions'), transaction);
+      console.log('Document written with ID: ', docRef.id);
+    } catch (error) {
+      if (isFireStoreError(error)) {
+        console.error(error);
+      } else {
+        console.error('一般的なエラーは' + error);
+      }
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -72,6 +89,7 @@ function App() {
                 <Home
                   monthlyTransactions={monthlyTransactions}
                   setCurrentMonth={setCurrentMonth}
+                  onSaveTransaction={handleSaveTransaction}
                 />
               }
             />
