@@ -1,5 +1,6 @@
 import React from 'react';
 import FullCalender from '@fullcalendar/react';
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import jaLocale from '@fullcalendar/core/locales/ja';
 import { DatesSetArg, EventContentArg } from '@fullcalendar/core';
@@ -11,9 +12,14 @@ import { formatCurrency } from '../utils/formatting';
 interface CalenderProps {
   monthlyTransactions: Transaction[];
   setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
+  setCurrentDay: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Calendar = ({ monthlyTransactions, setCurrentMonth }: CalenderProps) => {
+const Calendar = ({
+  monthlyTransactions,
+  setCurrentMonth,
+  setCurrentDay,
+}: CalenderProps) => {
   // const events = [
   //   {
   //     title: 'Meeting',
@@ -72,14 +78,19 @@ const Calendar = ({ monthlyTransactions, setCurrentMonth }: CalenderProps) => {
     setCurrentMonth(datesetInfo.view.currentStart);
   };
 
+  const handleDateClick = (dateInfo: DateClickArg) => {
+    setCurrentDay(dateInfo.dateStr);
+  };
+
   return (
     <FullCalender
       locale={jaLocale}
-      plugins={[dayGridPlugin]}
+      plugins={[dayGridPlugin, interactionPlugin]}
       initialView="dayGridMonth"
       events={calenderEvents}
       eventContent={renderEventContent}
       datesSet={handleDateSet}
+      dateClick={handleDateClick}
     />
   );
 };
