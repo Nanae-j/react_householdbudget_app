@@ -73,6 +73,7 @@ const TransactionForm = ({
     watch,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm<Schema>({
     defaultValues: {
       type: 'expense',
@@ -84,8 +85,12 @@ const TransactionForm = ({
     resolver: zodResolver(transactionScheme),
   });
 
+  // 収支タイプを切り替える関数
   const incomeExpenseToggle = (type: IncomeExpense) => {
     setValue('type', type);
+    // 収支のボタンを切り替えた時に選択したカテゴリーが残ったままになり警告出る
+    // カテゴリーのstateを更新する前にカテゴリーの選択を空に
+    setValue('category', '' as Schema['category']);
   };
 
   // 収支タイプを監視
@@ -94,9 +99,6 @@ const TransactionForm = ({
   useEffect(() => {
     const newCategories =
       currentType === 'expense' ? expenseCategories : incomeCategories;
-    // 収支のボタンを切り替えた時に選択したカテゴリーが残ったままになり警告出る
-    // カテゴリーのstateを更新する前にカテゴリーの選択を空に
-    setValue('category', '' as Schema['category']);
     setCategories(newCategories);
   }, [currentType]);
 
@@ -106,8 +108,18 @@ const TransactionForm = ({
 
   // 送信処理
   const onSubmit: SubmitHandler<Schema> = (data) => {
-    console.log(data);
     onSaveTransaction(data);
+
+    // デフォルトの値でリセットされる
+    //ここでdateにcurrentDayを入れることで選択している日付を保持できる
+    // defaultValuesは最初に入れた値を保持するのでdateには最初の日付(今日)が入り続ける
+    reset({
+      type: 'expense',
+      date: currentDay,
+      amount: 0,
+      category: '' as Schema['category'],
+      content: '',
+    });
   };
 
   return (
