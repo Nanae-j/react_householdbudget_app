@@ -10,12 +10,14 @@ import { calculateDailyBalances } from '../utils/financeCalculations';
 import { formatCurrency } from '../utils/formatting';
 import { Palette } from '@mui/icons-material';
 import { useTheme } from '@mui/material';
+import { isSameMonth } from 'date-fns';
 
 interface CalenderProps {
   monthlyTransactions: Transaction[];
   setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
   setCurrentDay: React.Dispatch<React.SetStateAction<string>>;
   currentDay: string;
+  today: string;
 }
 
 const Calendar = ({
@@ -23,6 +25,7 @@ const Calendar = ({
   setCurrentMonth,
   setCurrentDay,
   currentDay,
+  today,
 }: CalenderProps) => {
   const theme = useTheme();
   // const events = [
@@ -87,8 +90,18 @@ const Calendar = ({
   };
 
   const handleDateSet = (datesetInfo: DatesSetArg) => {
+    const currentMonth = datesetInfo.view.currentStart;
     // currentMonthが更新されApp.tsxでformatMonthの引数に渡される
-    setCurrentMonth(datesetInfo.view.currentStart);
+    setCurrentMonth(currentMonth);
+
+    // 今日ボタンが押された時 = 表示月が今月の時のみで判定
+    // datesetInfoには月の情報しかなく日付の情報がないのでHomeで取得しているtodayで今日(currentDay)を更新
+    const todayDate = new Date();
+    // todayDateには今月の月、currentMonthには表示中の月が入っている
+    // date-fnsの関数に同じ月かどうか比べるisSameMonth()がある
+    if (isSameMonth(todayDate, currentMonth)) {
+      setCurrentDay(today);
+    }
   };
 
   const handleDateClick = (dateInfo: DateClickArg) => {

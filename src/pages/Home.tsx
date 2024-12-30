@@ -32,6 +32,7 @@ const Home = ({ monthlyTransactions, setCurrentMonth }: HomeProps) => {
           setCurrentMonth={setCurrentMonth}
           currentDay={currentDay}
           setCurrentDay={setCurrentDay}
+          today={today}
         />
       </Box>
       {/* 右側コンテンツ */}
