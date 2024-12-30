@@ -30,6 +30,7 @@ interface TransactionFormProps {
   isEntryDrawerOpen: boolean;
   currentDay: string;
   onSaveTransaction: (transaction: Schema) => Promise<void>;
+  selectedTransaction: Transaction | null;
 }
 
 type IncomeExpense = 'income' | 'expense';
@@ -44,6 +45,7 @@ const TransactionForm = ({
   isEntryDrawerOpen,
   currentDay,
   onSaveTransaction,
+  selectedTransaction,
 }: TransactionFormProps) => {
   const formWidth = 320;
 
@@ -121,6 +123,24 @@ const TransactionForm = ({
       content: '',
     });
   };
+
+  useEffect(() => {
+    if (selectedTransaction) {
+      setValue('type', selectedTransaction.type);
+      setValue('date', selectedTransaction.date);
+      setValue('category', selectedTransaction.category);
+      setValue('amount', selectedTransaction.amount);
+      setValue('content', selectedTransaction.content);
+    } else {
+      reset({
+        type: 'expense',
+        date: currentDay,
+        amount: 0,
+        category: '' as Schema['category'],
+        content: '',
+      });
+    }
+  }, [selectedTransaction]);
 
   return (
     <Box

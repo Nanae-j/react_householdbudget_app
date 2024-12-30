@@ -26,6 +26,8 @@ function App() {
   // new Dateを取得しているのでTSが型を自動的に推論してくれる
   // useState<Date>とする必要なし
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -67,7 +69,7 @@ function App() {
     try {
       //firestoreにデータを保存
       const docRef = await addDoc(collection(db, 'Transactions'), transaction);
-      console.log('Document written with ID: ', docRef.id);
+      // console.log('Document written with ID: ', docRef.id);
 
       // データを送信後、すぐに表示に反映するためにstateで管理
       const newTransaction = {
@@ -100,6 +102,8 @@ function App() {
                   monthlyTransactions={monthlyTransactions}
                   setCurrentMonth={setCurrentMonth}
                   onSaveTransaction={handleSaveTransaction}
+                  selectedTransaction={selectedTransaction}
+                  setSelectedTransaction={setSelectedTransaction}
                 />
               }
             />
