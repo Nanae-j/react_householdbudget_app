@@ -30,6 +30,7 @@ const Home = ({ monthlyTransactions, setCurrentMonth }: HomeProps) => {
         <Calendar
           monthlyTransactions={monthlyTransactions}
           setCurrentMonth={setCurrentMonth}
+          currentDay={currentDay}
           setCurrentDay={setCurrentDay}
         />
       </Box>

@@ -8,18 +8,23 @@ import '../Calendar.css';
 import { Balance, CalenderContent, Transaction } from '../types';
 import { calculateDailyBalances } from '../utils/financeCalculations';
 import { formatCurrency } from '../utils/formatting';
+import { Palette } from '@mui/icons-material';
+import { useTheme } from '@mui/material';
 
 interface CalenderProps {
   monthlyTransactions: Transaction[];
   setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
   setCurrentDay: React.Dispatch<React.SetStateAction<string>>;
+  currentDay: string;
 }
 
 const Calendar = ({
   monthlyTransactions,
   setCurrentMonth,
   setCurrentDay,
+  currentDay,
 }: CalenderProps) => {
+  const theme = useTheme();
   // const events = [
   //   {
   //     title: 'Meeting',
@@ -53,8 +58,16 @@ const Calendar = ({
       };
     });
   };
-
+  // 各日付の収支データをfullCalanderのイベントに登録できる形式に変換する関数 ここまで
   const calenderEvents = createCalenderEvents(dailyBalances);
+
+  // 選択した日付に背景色をつけるためのイベント
+  //handleDateClickでcurrentDayが切り替わるのでクリックされた日に背景色のイベントが入ることになる
+  const backgroundEvent = {
+    start: currentDay,
+    display: 'background',
+    backgroundColor: theme.palette.incomeColor.light,
+  };
 
   const renderEventContent = (eventInfo: EventContentArg) => {
     // console.log(eventInfo);
@@ -87,7 +100,7 @@ const Calendar = ({
       locale={jaLocale}
       plugins={[dayGridPlugin, interactionPlugin]}
       initialView="dayGridMonth"
-      events={calenderEvents}
+      events={[...calenderEvents, backgroundEvent]}
       eventContent={renderEventContent}
       datesSet={handleDateSet}
       dateClick={handleDateClick}
