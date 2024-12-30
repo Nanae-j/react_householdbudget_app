@@ -68,6 +68,16 @@ function App() {
       //firestoreにデータを保存
       const docRef = await addDoc(collection(db, 'Transactions'), transaction);
       console.log('Document written with ID: ', docRef.id);
+
+      // データを送信後、すぐに表示に反映するためにstateで管理
+      const newTransaction = {
+        id: docRef.id,
+        ...transaction,
+      } as Transaction;
+      setTransactions((prevTransaction) => [
+        ...prevTransaction,
+        newTransaction,
+      ]);
     } catch (error) {
       if (isFireStoreError(error)) {
         console.error(error);

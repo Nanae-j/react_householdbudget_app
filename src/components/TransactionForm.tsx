@@ -21,7 +21,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import SavingsIcon from '@mui/icons-material/Savings';
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { ExpenseCategory, IncomeCategory } from '../types';
+import { ExpenseCategory, IncomeCategory, Transaction } from '../types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Schema, transactionScheme } from '../validations/scheme';
 
