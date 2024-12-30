@@ -11,10 +11,96 @@
   <!-- ミドルウェア -->
   <img src="https://img.shields.io/badge/-Firebase-FFCA28.svg?logo=firebase&style=for-the-badge">
 </div>
+
+#### 使用ライブラリ
 <div>
   <!-- 使用ライブラリ -->
   <p>MUI</p>
   <p>MUI - Material Icons</p>
   <p>Fullcalendar</p>
   <p>date-fns</p>
-  </div>
+</div>
+
+
+## 目次
+
+1. [プロジェクトについて](#プロジェクトについて)
+2. [環境](#環境)
+3. [ディレクトリ構成](#ディレクトリ構成)
+4. [開発環境構築](#開発環境構築)
+
+
+## react_householdbudget_app
+
+<!-- プロジェクトの概要を記載 -->
+
+  <p align="left">
+    <br />
+    <a href=""><strong>プロジェクト詳細 »</strong></a>
+    <br />
+    <br />
+
+<p align="right">(<a href="#top">トップへ</a>)</p>
+
+<!-- 言語、フレームワーク、ミドルウェア、インフラの一覧とバージョンを記載 -->
+
+| 言語・フレームワーク  | バージョン |
+| --------------------- | ---------- |
+| Node.js               | 18.20.4    |
+| React                 | 18.3.1     |
+
+その他のパッケージのバージョンは pyproject.toml と package.json を参照してください
+
+<p align="right">(<a href="#top">トップへ</a>)</p>
+
+
+## ディレクトリ構成
+
+tree -a -I "node_modules|.git|public" -L 3
+.
+├── .env
+├── .gitignore
+├── README.md
+├── package-lock.json
+├── package.json
+├── src
+│   ├── App.css
+│   ├── App.tsx
+│   ├── Calendar.css
+│   ├── components
+│   │   ├── Calendar.tsx
+│   │   ├── DailySummary.tsx
+│   │   ├── MonthlySummary.tsx
+│   │   ├── TransactionForm.tsx
+│   │   ├── TransactionMenu.tsx
+│   │   ├── common
+│   │   └── layout
+│   ├── firebase.ts
+│   ├── index.css
+│   ├── index.tsx
+│   ├── pages
+│   │   ├── Home.tsx
+│   │   ├── NoMatch.tsx
+│   │   └── Report.tsx
+│   ├── theme
+│   │   └── theme.ts
+│   ├── types
+│   │   └── index.ts
+│   └── utils
+│       ├── financeCalculations.ts
+│       └── formatting.ts
+└── tsconfig.json
+
+ 補足
+
+├── components
+│   ├── common - 複数のファイルで呼び出す汎用コンポーネント
+│   └── layout - アプリ全体のレイアウト
+├── pages
+├── theme - MUIテーマの拡張
+├── types - アプリ全体で使用する型定義
+└── utils - アプリ全体で使用する汎用関数
+               ├── financeCalculations.ts - 収支計算に関する関数
+               └── formatting.ts - 日付や金額のデータをフォーマットする関数
+
+<p align="right">(<a href="#top">トップへ</a>)</p>
