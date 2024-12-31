@@ -6,7 +6,12 @@ import MonthSelector from '../components/MonthSelector';
 import TransactionTable from '../components/TransactionTable';
 import BarChart from '../components/BarChart';
 
-const Report = () => {
+interface ReportProps {
+  currentMonth: Date;
+  setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
+}
+
+const Report = ({ currentMonth, setCurrentMonth }: ReportProps) => {
   const commonPaperStyle = {
     height: { xs: 'auto', md: '400px' },
     display: 'flex',
@@ -16,7 +21,10 @@ const Report = () => {
     <Grid container spacing={2}>
       <Grid size={{ xs: 12 }}>
         {/* 日付選択エリア */}
-        <MonthSelector />
+        <MonthSelector
+          currentMonth={currentMonth}
+          setCurrentMonth={setCurrentMonth}
+        />
       </Grid>
       <Grid size={{ xs: 12, md: 4 }}>
         <Paper sx={commonPaperStyle}>
