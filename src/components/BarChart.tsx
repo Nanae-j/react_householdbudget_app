@@ -7,8 +7,12 @@ import {
   Title,
   Tooltip,
   Legend,
+  ChartData,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import { calculateDailyBalances } from '../utils/financeCalculations';
+import { Transaction } from '../types';
+import { useTheme } from '@mui/material';
 
 ChartJS.register(
   CategoryScale,
@@ -18,46 +22,50 @@ ChartJS.register(
   Tooltip,
   Legend,
 );
+interface BarChartProps {
+  monthlyTransactions: Transaction[];
+}
 
-const options = {
-  maintainAspectRatio: false,
-  responsive: true,
-  plugins: {
-    // legend: {
-    //   position: 'top' as const,
-    // },
-    title: {
-      display: true,
-      text: '日別収支',
+const BarChart = ({ monthlyTransactions }: BarChartProps) => {
+  const theme = useTheme();
+  const options = {
+    maintainAspectRatio: false,
+    responsive: true,
+    plugins: {
+      // legend: {
+      //   position: 'top' as const,
+      // },
+      title: {
+        display: true,
+        text: '日別収支',
+      },
     },
-  },
-};
+  };
 
-const labels = [
-  '2024-01-10',
-  '2024-01-15',
-  '2024-01-16',
-  '2024-01-19',
-  '2024-01-23',
-];
+  // 日毎の income,expense,balanceのオブジェクト(日付がキー)
+  const dailyBalances = calculateDailyBalances(monthlyTransactions);
 
-const data = {
-  labels,
-  datasets: [
-    {
-      label: '収入',
-      data: [100, 200, 300, 400, 500],
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-    {
-      label: '支出',
-      data: [200, 800, 300, 400, 500],
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-  ],
-};
+  const dateLabels = Object.keys(dailyBalances).sort();
 
-const BarChart = () => {
+  const expenseData = dateLabels.map((day) => dailyBalances[day].expense);
+  const incomeData = dateLabels.map((day) => dailyBalances[day].income);
+
+  const data: ChartData<'bar'> = {
+    labels: dateLabels,
+    datasets: [
+      {
+        label: '収入',
+        data: incomeData,
+        backgroundColor: theme.palette.incomeColor.light,
+      },
+      {
+        label: '支出',
+        data: expenseData,
+        backgroundColor: theme.palette.expenseColor.light,
+      },
+    ],
+  };
+
   return <Bar options={options} data={data} />;
 };
 
