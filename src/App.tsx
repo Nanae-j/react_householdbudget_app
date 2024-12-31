@@ -98,13 +98,25 @@ function App() {
   };
 
   //firestoreのデータ削除処理
-  const handleDeleteTransaction = async (transactionId: string) => {
-    console.log(transactionId);
+  const handleDeleteTransaction = async (
+    transactionIds: string | readonly string[],
+  ) => {
+    // console.log(transactionId);
     try {
-      await deleteDoc(doc(db, 'Transactions', transactionId));
+      // transactionIdsが単一の要素だった場合、配列で囲む
+      const idsToDelete = Array.isArray(transactionIds)
+        ? transactionIds
+        : [transactionIds];
+
+      for (const id of idsToDelete) {
+        await deleteDoc(doc(db, 'Transactions', id));
+      }
       //transaction.id !== transactionIdで削除対象のID以外のtransactionが取得できる
+      // const filterdTransactions = transactions.filter(
+      //   (transaction) => transaction.id !== transactionId,
+      // );
       const filterdTransactions = transactions.filter(
-        (transaction) => transaction.id !== transactionId,
+        (transaction) => !idsToDelete.includes(transaction.id),
       );
       setTransactions(filterdTransactions);
     } catch (error) {
@@ -168,6 +180,7 @@ function App() {
                   setCurrentMonth={setCurrentMonth}
                   monthlyTransactions={monthlyTransactions}
                   isLoading={isLoading}
+                  handleDeleteTransaction={handleDeleteTransaction}
                 />
               }
             />

@@ -57,12 +57,12 @@ function TransactionTableHead(props: TransactionTableHeadProps) {
 }
 interface TransactionTableToolbarProps {
   numSelected: number;
-  // onDelete: () => void;
+  onDelete: () => void;
 }
 
 // ツールバー
 function TransactionTableToolbar(props: TransactionTableToolbarProps) {
-  const { numSelected } = props;
+  const { numSelected, onDelete } = props;
 
   return (
     <Toolbar
@@ -100,7 +100,7 @@ function TransactionTableToolbar(props: TransactionTableToolbarProps) {
       {numSelected > 0 && (
         <Tooltip title="Delete">
           <IconButton>
-            <DeleteIcon />
+            <DeleteIcon onClick={onDelete} />
           </IconButton>
         </Tooltip>
       )}
@@ -137,10 +137,14 @@ function FinancialItem({ title, value, color }: FinancialItemProps) {
 
 interface TransactionTableProps {
   monthlyTransactions: Transaction[];
+  onDeleteTransaction: (
+    transactionId: string | readonly string[],
+  ) => Promise<void>;
 }
 
 export default function TransactionTable({
   monthlyTransactions,
+  onDeleteTransaction,
 }: TransactionTableProps) {
   const theme = useTheme();
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -186,9 +190,10 @@ export default function TransactionTable({
     setPage(0);
   };
 
-  // const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setDense(event.target.checked);
-  // };
+  const handleDelete = () => {
+    onDeleteTransaction(selected);
+    setSelected([]);
+  };
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -196,9 +201,12 @@ export default function TransactionTable({
       ? Math.max(0, (1 + page) * rowsPerPage - monthlyTransactions.length)
       : 0;
 
+  // 取引データから表示件数分取得
   const visibleRows = React.useMemo(() => {
-    const copyMonthlyTransactions = [...monthlyTransactions];
-    return copyMonthlyTransactions.slice(
+    const sortedMonthlyTransactions = [...monthlyTransactions].sort((a, b) =>
+      compareDesc(parseISO(a.date), parseISO(b.date)),
+    );
+    return sortedMonthlyTransactions.slice(
       page * rowsPerPage,
       page * rowsPerPage + rowsPerPage,
     );
@@ -230,7 +238,10 @@ export default function TransactionTable({
           />
         </Grid>
         {/* ツールバー */}
-        <TransactionTableToolbar numSelected={selected.length} />
+        <TransactionTableToolbar
+          numSelected={selected.length}
+          onDelete={handleDelete}
+        />
         {/* 取引一覧 */}
         <TableContainer>
           <Table
@@ -313,10 +324,6 @@ export default function TransactionTable({
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      {/* <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      /> */}
     </Box>
   );
 }
