@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  ChartData,
+} from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import {
   Box,
@@ -9,6 +15,7 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
+  Typography,
 } from '@mui/material';
 import {
   ExpenseCategory,
@@ -16,14 +23,16 @@ import {
   Transaction,
   TransactionType,
 } from '../types';
+import CircularProgress from '@mui/material/CircularProgress';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface CategoryChart {
   monthlyTransactions: Transaction[];
+  isLoading: boolean;
 }
 
-const CategoryChart = ({ monthlyTransactions }) => {
+const CategoryChart = ({ monthlyTransactions, isLoading }) => {
   const [selectedType, setSelectedType] = useState<TransactionType>('expense');
 
   const handleChange = (
@@ -44,14 +53,20 @@ const CategoryChart = ({ monthlyTransactions }) => {
       acc[transaction.category] += transaction.amount;
       return acc;
     }, {} as Record<IncomeCategory | ExpenseCategory, number>);
-  console.log(categorySums);
 
-  const data = {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+  const categoryLabels = Object.keys(categorySums);
+  const categoryValues: number[] = Object.values(categorySums);
+
+  const options = {
+    maintainAspectRatio: false,
+    responsive: true,
+  };
+
+  const data: ChartData<'pie'> = {
+    labels: categoryLabels,
     datasets: [
       {
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
+        data: categoryValues,
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',
@@ -74,7 +89,7 @@ const CategoryChart = ({ monthlyTransactions }) => {
   };
 
   return (
-    <Box>
+    <>
       <TextField
         id={'selct-type-label'}
         label="収支の種類"
@@ -108,8 +123,23 @@ const CategoryChart = ({ monthlyTransactions }) => {
           <MenuItem value="expense">支出</MenuItem>
         </Select>
       </FormControl> */}
-      <Pie data={data} />
-    </Box>
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {isLoading ? (
+          <CircularProgress />
+        ) : monthlyTransactions.length > 0 ? (
+          <Pie data={data} options={options} />
+        ) : (
+          <Typography>データがありません</Typography>
+        )}
+      </Box>
+    </>
   );
 };
 
