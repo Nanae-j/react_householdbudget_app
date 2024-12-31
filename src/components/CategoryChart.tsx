@@ -10,11 +10,20 @@ import {
   SelectChangeEvent,
   TextField,
 } from '@mui/material';
-import { TransactionType } from '../types';
+import {
+  ExpenseCategory,
+  IncomeCategory,
+  Transaction,
+  TransactionType,
+} from '../types';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const CategoryChart = () => {
+interface CategoryChart {
+  monthlyTransactions: Transaction[];
+}
+
+const CategoryChart = ({ monthlyTransactions }) => {
   const [selectedType, setSelectedType] = useState<TransactionType>('expense');
 
   const handleChange = (
@@ -22,6 +31,20 @@ const CategoryChart = () => {
   ) => {
     setSelectedType(e.target.value as TransactionType);
   };
+
+  // 現在選択中の収支タイプのみの取引を取得
+  const categorySums = monthlyTransactions
+    .filter((transaction) => transaction.type === selectedType)
+    .reduce((acc, transaction) => {
+      if (!acc[transaction.category]) {
+        acc[transaction.category] = 0;
+      }
+      // '食費'のカテゴリーの時には処理中のtransactionの金額を足していく
+      // 1回目の時にundefind + 100 などになりNanになる 初期化処理が必要
+      acc[transaction.category] += transaction.amount;
+      return acc;
+    }, {} as Record<IncomeCategory | ExpenseCategory, number>);
+  console.log(categorySums);
 
   const data = {
     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
