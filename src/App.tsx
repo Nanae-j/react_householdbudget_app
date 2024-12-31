@@ -33,6 +33,7 @@ function App() {
   // new Dateを取得しているのでTSが型を自動的に推論してくれる
   // useState<Date>とする必要なし
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -59,6 +60,8 @@ function App() {
         } else {
           console.error('一般的なエラーは' + error);
         }
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchTransactions();
@@ -164,6 +167,7 @@ function App() {
                   currentMonth={currentMonth}
                   setCurrentMonth={setCurrentMonth}
                   monthlyTransactions={monthlyTransactions}
+                  isLoading={isLoading}
                 />
               }
             />
