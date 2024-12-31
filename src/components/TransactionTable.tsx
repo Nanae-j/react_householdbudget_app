@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { alpha } from '@mui/material/styles';
+import { alpha, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -20,6 +20,9 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import { Transaction } from '../types';
+import { financeCalculations } from '../utils/financeCalculations';
+import Grid from '@mui/material/Grid2';
 
 interface Data {
   id: number;
@@ -128,7 +131,7 @@ const headCells: readonly HeadCell[] = [
   },
 ];
 
-interface TransactionTableProps {
+interface TransactionTableHeadProps {
   numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
@@ -141,7 +144,7 @@ interface TransactionTableProps {
 }
 
 // テーブルヘッド
-function TransactionTableHead(props: TransactionTableProps) {
+function TransactionTableHead(props: TransactionTableHeadProps) {
   const {
     onSelectAllClick,
     order,
@@ -252,7 +255,30 @@ function TransactionTableToolbar(props: TransactionTableToolbarProps) {
     </Toolbar>
   );
 }
-export default function TransactionTable() {
+
+interface FinancialItemProps {
+  title: string;
+  value: number;
+  color: string;
+}
+
+function FinancialItem({ title, value, color }: FinancialItemProps) {
+  return (
+    <Grid>
+      <Typography>{title}</Typography>
+      <Typography sx={{ color: color }}>¥{value}</Typography>
+    </Grid>
+  );
+}
+
+interface TransactionTableProps {
+  monthlyTransactions: Transaction[];
+}
+
+export default function TransactionTable({
+  monthlyTransactions,
+}: TransactionTableProps) {
+  const theme = useTheme();
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -324,9 +350,28 @@ export default function TransactionTable() {
     [order, orderBy, page, rowsPerPage],
   );
 
+  const { income, expense, balance } = financeCalculations(monthlyTransactions);
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
+        <Grid container>
+          <FinancialItem
+            title={'収入'}
+            value={income}
+            color={theme.palette.incomeColor.main}
+          />
+          <FinancialItem
+            title={'支出'}
+            value={expense}
+            color={theme.palette.expenseColor.main}
+          />
+          <FinancialItem
+            title={'残高'}
+            value={balance}
+            color={theme.palette.balanceColor.main}
+          />
+        </Grid>
         {/* ツールバー */}
         <TransactionTableToolbar numSelected={selected.length} />
         {/* 取引一覧 */}

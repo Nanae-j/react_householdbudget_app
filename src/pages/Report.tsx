@@ -53,7 +53,7 @@ const Report = ({
         </Paper>
       </Grid>
       <Grid size={{ xs: 12 }}>
-        <TransactionTable />
+        <TransactionTable monthlyTransactions={monthlyTransactions} />
       </Grid>
     </Grid>
   );
