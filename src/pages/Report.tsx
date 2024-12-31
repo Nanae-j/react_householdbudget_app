@@ -16,6 +16,7 @@ const Report = ({ currentMonth, setCurrentMonth }: ReportProps) => {
     height: { xs: 'auto', md: '400px' },
     display: 'flex',
     flexDirection: 'column',
+    p: 2,
   };
   return (
     <Grid container spacing={2}>
@@ -33,6 +34,7 @@ const Report = ({ currentMonth, setCurrentMonth }: ReportProps) => {
       </Grid>
       <Grid size={{ xs: 12, md: 8 }}>
         <Paper sx={commonPaperStyle}>
+          {/* 棒グラフ */}
           <BarChart />
         </Paper>
       </Grid>
