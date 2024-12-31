@@ -2,9 +2,13 @@ import {
   Box,
   Button,
   ButtonGroup,
+  FormControl,
+  FormHelperText,
   IconButton,
+  InputLabel,
   ListItemIcon,
   MenuItem,
+  Select,
   Stack,
   TextField,
   Typography,
@@ -291,6 +295,18 @@ const TransactionForm = ({
                 id="カテゴリ"
                 label="カテゴリ"
                 select
+                slotProps={{
+                  inputLabel: {
+                    htmlFor: 'category',
+                  },
+                  input: {
+                    id: 'category',
+                  },
+                }}
+                // InputLabelProps={{
+                //   htmlFor: 'category',
+                // }}
+                // inputProps={{ id: 'category' }}
               >
                 {categories.map((category) => (
                   <MenuItem key={category.label} value={category.label}>
@@ -299,6 +315,24 @@ const TransactionForm = ({
                   </MenuItem>
                 ))}
               </TextField>
+
+              // <FormControl fullWidth error={!!errors.category}>
+              //   <InputLabel id="category-select-label">カテゴリ</InputLabel>
+              //   <Select
+              //     {...field}
+              //     labelId="category-select-label"
+              //     id="category-select"
+              //     label="カテゴリ"
+              //   >
+              //     {categories.map((category) => (
+              //       <MenuItem key={category.label} value={category.label}>
+              //         <ListItemIcon>{category.icon}</ListItemIcon>
+              //         {category.label}
+              //       </MenuItem>
+              //     ))}
+              //   </Select>
+              //   <FormHelperText>{errors.category?.message}</FormHelperText>
+              // </FormControl>
             )}
           />
 
