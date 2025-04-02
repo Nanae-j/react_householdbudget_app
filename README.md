@@ -19,6 +19,10 @@
   <p>MUI - Material Icons</p>
   <p>Fullcalendar</p>
   <p>date-fns</p>
+  <p>react-chartjs</p>
+  <p>firebase</p>
+  <p>react-hook-form</p>
+  <p>zod</p>
 </div>
 
 
@@ -66,12 +70,12 @@
 
 ## ディレクトリ構成
 
-tree -a -I "node_modules|.git|public" -L 3
-
 ```
 .
 ├── .env
 ├── .gitignore
+├── .vscode
+│   └── settings.json
 ├── README.md
 ├── package-lock.json
 ├── package.json
@@ -80,11 +84,15 @@ tree -a -I "node_modules|.git|public" -L 3
 │   ├── App.tsx
 │   ├── Calendar.css
 │   ├── components
+│   │   ├── BarChart.tsx
 │   │   ├── Calendar.tsx
+│   │   ├── CategoryChart.tsx
 │   │   ├── DailySummary.tsx
+│   │   ├── MonthSelector.tsx
 │   │   ├── MonthlySummary.tsx
 │   │   ├── TransactionForm.tsx
 │   │   ├── TransactionMenu.tsx
+│   │   ├── TransactionTable.tsx
 │   │   ├── common
 │   │   └── layout
 │   ├── firebase.ts
@@ -98,13 +106,15 @@ tree -a -I "node_modules|.git|public" -L 3
 │   │   └── theme.ts
 │   ├── types
 │   │   └── index.ts
-│   └── utils
-│       ├── financeCalculations.ts
-│       └── formatting.ts
+│   ├── utils
+│   │   ├── financeCalculations.ts
+│   │   └── formatting.ts
+│   └── validations
+│       └── scheme.ts
 └── tsconfig.json
 ```
 
- 補足
+コンポーネントとファイル構成
 ```
 ├── components
 │   ├── common - 複数のファイルで呼び出す汎用コンポーネント
@@ -131,8 +141,6 @@ In the project directory, you can run:
 以下の環境変数例と[環境変数の一覧](#環境変数の一覧)を元に作成
 
 .env
-FIREBASE_API_KEY=jvA2fVnrPn
-
 ```
 ### 環境変数の一覧
 
