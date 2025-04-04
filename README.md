@@ -34,17 +34,86 @@
 4. [開発環境構築](#開発環境構築)
 
 
-## react_householdbudget_app
+## プロジェクトについて
 
-<!-- プロジェクトの概要を記載 -->
+<p align="right">(<a href="#top">トップへ</a>)</p>
 
-  <p align="left">
-    <br />
-    <a href=""><strong>プロジェクト詳細 »</strong></a>
-    <br />
-  </p>
+<!-- プロジェクトの環境を記載 -->
+### プロジェクトの概要
 
-  ### コンポーネントとレイアウトの構成
+<p>
+このアプリは、Next.js学習の前段階として、ReactとTypeScriptの基本的な構文や使用方法、そしてFirestoreを使用したCRUD操作の基礎を学ぶ目的でUdemy講座を参考に制作しました。<br />
+フロントエンド開発において重要なコンポーネント設計とTypeScriptによる型定義について、実際に手を動かしながら理解を深めることができました。特に型安全性の確保と開発時のコード補完の恩恵を実感できた点は大きな収穫でした。<br />
+また、Material UI (MUI)というUIライブラリを活用することで、コンポーネントベースの開発手法をさらに理解するとともに、アプリケーション全体のテーマ管理を効率的に行う手法についても学びを深めることができました。このライブラリ導入によって、一貫性のあるデザインの実現とコーディング時間の短縮を両立できたことは、実務を想定した開発フローを体験する良い機会となりました。
+</p>
+
+
+<a href="https://www.udemy.com/course/react-complete-guide/?couponCode=KEEPLEARNING">udemy - 【2024年最新】React(v18)完全入門ガイド｜Hooks、Next14、Redux、TypeScript</a>
+<a href="https://www.udemy.com/course/reacttypescrip-reacttypescript/?couponCode=KEEPLEARNING">udemy - 【『React』×『TypeScrip』入門　】家計簿アプリ作成でReactとTypeScriptの開発方法を学ぼう</a>
+
+### つまずいたところ
+
+#### MUIのバージョンにより使用方法が変更になっていた
+
+<p>
+  udemy動画とバージョンの差分があり、私の環境(v6)ではimport先やpropsの渡し方が変更になっていた。ライブラリではバージョンによって使用方法が細かく変わるので<a href="https://mui.com/material-ui/migration/upgrade-to-v6/#grid">リファレンス</a>を確認する癖をつける良い学習になりました。
+</p>
+
+Gridコンポーネントではimport先変更、item,xs属性は渡せないようになっているのでsizeで渡す。  
+```
+旧:
+import { Grid } from "@mui/material";
+
+<Grid container spacing={1}>
+  <Grid item xs={1}>
+    {/* コンテンツ内容 */}
+  </Grid>
+  <Grid item xs={2.5}>
+    {/* コンテンツ内容 */}
+  </Grid>
+</Grid>
+
+新:
+<Grid container spacing={1}>
+  <Grid size={1}>
+    {/* コンテンツ内容 */}
+  </Grid>
+  <Grid size={2.5}>
+    {/* コンテンツ内容 */}
+  </Grid>
+</Grid>
+```
+
+#### interfaceではできない型定義がある
+
+<img width="757" alt="スクリーンショット 2025-04-04 9 11 38" src="https://github.com/user-attachments/assets/8469dad3-9d36-4f86-b665-d3202cf6d759" />
+
+```
+const TransactionType = 'income' | 'expense';
+
+//上記のような型定義はinterfaceではできない
+const type TransactionType = 'income' | 'expense';
+
+//下記のようにtypeでの宣言をinterfaceに含めることは可能
+export interface Transaction {
+  id: string;
+  amount: number;
+  content: string;
+  type: TransactionType;
+}
+```
+
+### 制作後の振り返り
+
+<p>
+TypeScriptの型定義の基本的な使い方や、Record型を用いたオブジェクトの型定義など、実践的な書き方に少し慣れることができました。これにより、コード補完や型チェックの恩恵を実感できるようになりました。<br />
+今回初めてCRUD操作（作成・読取・更新・削除）を実装したことで、データの取得や送信をサーバーサイドで処理する基本的な流れを手を動かしながら理解できました。特にFirestoreとの連携方法や非同期処理の扱いについて、実践的な知識を得られたことは大きな学びでした。 <br />
+UIライブラリ（MUI）については、その利便性を実感し、大規模アプリケーションやチーム開発における一貫性の担保に非常に有用であることを理解できました。しかし、カスタムテーマの設定やコンポーネントのカスタマイズについては、まだ十分に習得できておらず、効率的に活用するには更なる学習が必要だと感じています。<br />
+今後の学習では、異なるUIライブラリやデータベースシステムも積極的に取り入れ、より幅広い技術スタックへの理解を深めていきたいと思います。特にモダンな開発ツールについても学習を進めたいと考えています。
+</p>
+
+
+### コンポーネントとレイアウトの構成
 
 ![AppLayout](https://github.com/user-attachments/assets/fda6f952-24cc-4729-9f06-85640fe8da54)
 
