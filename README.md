@@ -32,6 +32,7 @@
 2. [環境](#環境)
 3. [ディレクトリ構成](#ディレクトリ構成)
 4. [開発環境構築](#開発環境構築)
+5. [開発メモ](#開発メモ)
 
 
 ## プロジェクトについて
@@ -223,9 +224,10 @@ In the project directory, you can run:
 
 #### `npm run start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
+## 開発メモ
+
+<p><a href="https://www.notion.so/Udemy-16adf53fe25a806fb081eceae3c53842?pvs=4">Notion まとめ</a></p>
 <p align="right">(<a href="#top">トップへ</a>)</p>
 
 
